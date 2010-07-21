@@ -1,14 +1,11 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
- * Pur Accessible Captcha
- *
  * An ExpressionEngine Extension that changes the default graphic
  * captcha into a question & answer based one.
  *
- * @package		Pur_accessible_captcha
+ * @package		Accessible Captcha
  * @author		Greg Salt <greg@purple-dogfish.co.uk>
- * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+ * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
  * @license		http://creativecommons.org/licenses/by-sa/3.0/
  * @link		http://www.purple-dogfish.co.uk
  * @since		Version 2.0
@@ -17,15 +14,17 @@
 
 /**
  * Changelog
+ * Version 2.1 2010
+ * Removed 'pur' prefix from files
  * 
  * Version 2.0 20091204
  * --------------------
  * Initial public release
  */
-class Pur_accessible_captcha_ext {
+class Accessible_captcha_ext {
 
 	var $name            = 'Accessible Captcha';
-	var $version         = '2.0';
+	var $version         = '2.1';
 	var $description     = 'Convert the existing graphic captcha into an accessible version using questions and answers';
 	var $settings_exist  = 'y';
 	var $docs_url        = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha';
@@ -36,22 +35,21 @@ class Pur_accessible_captcha_ext {
 	 * Constructor
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
-	function Pur_accessible_captcha_ext($settings = '')
+	function Accessible_captcha_ext($settings = '')
 	{
 		$this->EE =& get_instance();
 		
     	$this->settings = $settings;
 	}
-	/* End of Pur_accessible_captcha_ext */
 	
 	/**
 	 * Activate Extension
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function activate_extension()
@@ -80,26 +78,38 @@ class Pur_accessible_captcha_ext {
 		
     	$this->EE->db->insert('extensions', $data);
 	}
-	/* End of activate_extension */
 
 	/**
 	 * Update Extension
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function update_extension($current = '')
 	{
-    	return TRUE;
+		$status = TRUE;
+		
+		if ($this->version != $current)
+		{
+			$data = array();
+			$data['version'] = $this->version;
+			$this->EE->db->update('extensions', $data, 'version = '.$current);
+			
+			if($this->EE->db->affected_rows() != 1)
+			{
+				$status = FALSE;
+			}
+		}
+		
+		return $status;
 	}
-	/* End of update_extension */
 
 	/**
 	 * Disable Extensions
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function disable_extension()
@@ -107,49 +117,34 @@ class Pur_accessible_captcha_ext {
 		$this->EE->db->where('class', __CLASS__);
     	$this->EE->db->delete('extensions');
 	}
-	/* End of disable_extension */
 	
 	/**
 	 * Settings
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
-	function settings()
+	function settings_form($current)
 	{
-		$this->EE->lang->loadfile('pur_accessible_captcha');
+		$this->EE->load->library('twig');
+		$this->EE->lang->loadfile('accessible_captcha');
+		$this->EE->cp->load_package_js('accessible_captcha');
 		
-		$settings = array();
-
-		$settings['hints'] = array('r', array('yes' => 'yes', 'no' => 'no'), 'no');
-		$settings['hints_wrap'] = array('r', array('yes' => "yes", 'no' => "no"), 'no');
-    	$settings['question1'] = array('t', array('rows' => 2), $this->EE->lang->line('warning_question'));
-    	$settings['answer1'] = array('t', array('rows' => 1), $this->EE->lang->line('warning_answer'));
-    	$settings['question2'] = array('t', array('rows' => 2), '');
-    	$settings['answer2'] = array('t', array('rows' => 1), '');
-    	$settings['question3'] = array('t', array('rows' => 2), '');
-    	$settings['answer3'] = array('t', array('rows' => 1), '');
-		$settings['question4'] = array('t', array('rows' => 2), '');
-		$settings['answer4'] = array('t', array('rows' => 1), '');
-		$settings['question5'] = array('t', array('rows' => 2), '');
-		$settings['answer5'] = array('t', array('rows' => 1), '');
-		$settings['question6'] = array('t', array('rows' => 2), '');
-		$settings['answer6'] = array('t', array('rows' => 1), '');
-		$settings['question7'] = array('t', array('rows' => 2), '');
-		$settings['answer7'] = array('t', array('rows' => 1), '');
-		$settings['question8'] = array('t', array('rows' => 2), '');
-		$settings['answer8'] = array('t', array('rows' => 1), '');
-
-    	return $settings;
+		$data = array();
+		if ($this->EE->config->item('secure_forms') == 'y')
+		{
+			$data['XID'] = XID_SECURE_HASH;
+		}
+		$data['lang'] = $this->EE->lang->language;
+    	return $this->EE->twig->render('settings.html', $data, TRUE);
 	}
-	/* End of settings */
 
 	/**
 	 * Create Captcha
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function create_captcha($old_word = '')
@@ -208,13 +203,12 @@ class Pur_accessible_captcha_ext {
 		
 		return $question;
 	}
-	/* End of create_captcha */
 	
 	/**
 	 * Lang Override
 	 *
 	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function lang_override()
@@ -225,7 +219,7 @@ class Pur_accessible_captcha_ext {
 			return;
 		}
 		
-		$this->EE->lang->loadfile('pur_accessible_captcha');
+		$this->EE->lang->loadfile('accessible_captcha');
 		$captcha_required = $this->EE->lang->line('captcha_required');
 		$captcha_incorrect = $this->EE->lang->line('captcha_incorrect');
 		$this->EE->lang->loadfile('core');
@@ -234,7 +228,6 @@ class Pur_accessible_captcha_ext {
 		$this->EE->lang->language['captcha_required'] = $captcha_required;
 		$this->EE->lang->language['captcha_incorrect'] = $captcha_incorrect;
 	}
-	/* End of lang_override */
 }
-/* End of file pur_accessible_captcha.php */
-/* Location: ./system/expressionengine/third_party/pur_accessible_captcha/pur_accessible_captcha.php */
+/* End of file accessible_captcha.php */
+/* Location: ./system/expressionengine/third_party/accessible_captcha/accessible_captcha.php */
