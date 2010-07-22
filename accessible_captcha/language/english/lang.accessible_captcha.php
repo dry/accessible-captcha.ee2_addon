@@ -11,6 +11,9 @@ $lang = array(
 	'setting' =>
 	'Setting',
 	
+	'warning_no_questions' =>
+	'If you remove all the question and answer pairs Accessible Captcha won&rsquo;t work!',
+	
 	'warning_question' =>
 	'This is not a valid first question!',
 	

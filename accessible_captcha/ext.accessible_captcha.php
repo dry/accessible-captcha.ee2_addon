@@ -130,6 +130,13 @@ class Accessible_captcha_ext {
 		$this->EE->load->library('twig');
 		$this->EE->lang->loadfile('accessible_captcha');
 		$this->EE->cp->load_package_js('accessible_captcha');
+		$this->EE->cp->load_package_css('accessible_captcha');
+		
+		$this->EE->javascript->output(array('
+			AC = {};
+			AC.lang_warning = "'.$this->EE->lang->line('warning_no_questions').'"
+		'));
+		$this->EE->javascript->compile();
 		
 		$data = array();
 		if ($this->EE->config->item('secure_forms') == 'y')

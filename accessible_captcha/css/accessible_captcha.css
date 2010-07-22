@@ -1,0 +1,33 @@
+#controls {
+	margin: auto auto 10px;
+}
+
+#add_pair {
+	clear: both;
+	cursor: pointer;
+	font-size: 1em;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+#add_pair:hover {
+	color: #80b62a;
+}
+
+#remove_pair {
+	cursor: pointer;
+	font-size: 1em;
+	text-align: center;
+}
+#remove_pair:hover {
+	color: #d91350;
+}
+
+#warning {
+	background: #fcfcdf;
+	border: #CCC9A4 1px solid; 
+	color: #d91350;
+	margin: 0px 0 10px 0;
+	padding: 8px 10px 8px 10px; 
+}
