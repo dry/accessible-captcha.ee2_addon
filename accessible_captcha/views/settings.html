@@ -1,5 +1,5 @@
 <div class="pageContents">
-	<form action="C=addons_extensions&M=save_extension_settings&file=accessible_captcha" method="post">
+	<form action="{{ BASE }}&C=addons_extensions&M=save_extension_settings&file=accessible_captcha" method="post">
 		{% if XID %}
 		<div>
 			<input type="hidden" name="XID" value="{{ XID }}" />
@@ -22,7 +22,9 @@
 						<strong>{{ lang.switched_on }}
 					</td>
 					<td>
-						<input type="radio" name="switched_on" value="yes" id="switched_on" label="yes">&nbsp;<label for="switched_on">{{ lang.yes }}</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="switched_on" value="no" checked="checked" id="switched_off" label="no">&nbsp;<label for="switched_off">{{ lang.no }}</label>
+						<input {% if switched_on == 'yes' %} checked="checked" {% endif %} type="radio" name="switched_on" value="yes" id="switched_on" label="yes">&nbsp;<label for="switched_on">{{ lang.yes }}</label>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {% if switched_on == 'no' %} checked="checked" {% endif %} type="radio" name="switched_on" value="no" id="switched_off" label="no">&nbsp;<label for="switched_off">{{ lang.no }}</label>
 					</td>
 				</tr>
 				<tr class="even">
@@ -30,7 +32,9 @@
 						<strong>{{ lang.hints }}</strong>
 					</td>
 					<td>
-						<input type="radio" name="hints" value="yes" id="hints_yes" label="yes">&nbsp;<label for="hints_yes">{{ lang.yes }}</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="hints" value="no" checked="checked" id="hints_no" label="no">&nbsp;<label for="hints_no">{{ lang.no }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {% if hints == 'yes' %} checked="checked" {% endif %} type="radio" name="hints" value="yes" id="hints_yes" label="yes">&nbsp;<label for="hints_yes">{{ lang.yes }}</label>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {% if hints == 'no' %} checked="checked" {% endif %}type="radio" name="hints" value="no" id="hints_no" label="no">&nbsp;<label for="hints_no">{{ lang.no }}</label>
 					</td>
 				</tr>
 				<tr class="odd">
@@ -38,7 +42,9 @@
 						<strong>{{ lang.hints_wrap }}</strong>
 					</td>
 					<td>
-						<input type="radio" name="hints_wrap" value="yes" id="hints_wrap_yes" label="yes">&nbsp;<label for="hints_wrap_yes">{{ lang.yes }}</label>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="hints_wrap" value="no" checked="checked" id="hints_wrap_no" label="no">&nbsp;<label for="hints_wrap_no">{{ lang.no }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {% if hints_wrap == 'yes' %} checked="checked" {% endif %} type="radio" name="hints_wrap" value="yes" id="hints_wrap_yes" label="yes">&nbsp;<label for="hints_wrap_yes">{{ lang.yes }}</label>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input {% if hints_wrap == 'no' %} checked="checked" {% endif %}type="radio" name="hints_wrap" value="no" id="hints_wrap_no" label="no">&nbsp;<label for="hints_wrap_no">{{ lang.no }}</label>
 					</td>
 				</tr>
 			</tbody>
@@ -52,20 +58,26 @@
 					<th>
 						{{ lang.answer }}
 					</th>
+					<th class="remove_pair_column" style="width: 1ex;">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody class="settings_pair">
-				<tr class="even">
+			{% for pair in pairs %}
+				<tr class="{{ ['even', 'odd']|cycle(loop.index) }}">
 					<td>
-						<textarea name="question[]" rows="1" cols="30">{{ lang.warning_question }}</textarea>
+						<textarea name="questions[]" rows="1" cols="30">{{ pair.question|e }}</textarea>
 					</td>
 					<td>
-						<textarea name="answer[]" rows="1" cols="30">{{ lang.warning_answer }}</textarea>
+						<textarea name="answers[]" rows="1" cols="30">{{ pair.answer|e }}</textarea>
+					</td>
+					<td class="remove_pair_column">
+						<span class="remove_pair">&ndash;</span>
 					</td>
 				</tr>
+			{% endfor %}
 			</tbody>
 		</table>
-		<div id="controls"><span id="add_pair">+</span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="remove_pair">&ndash;</span></div>
+		<div id="controls"><span id="add_pair">+</span></div>
 		<input type="submit" name="submit" value="Submit" class="submit">
 	</form>
 	<div class="clear_right"></div>

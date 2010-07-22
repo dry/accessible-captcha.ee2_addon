@@ -135,6 +135,8 @@ class Accessible_captcha_ext {
 		$this->EE->javascript->output(array('
 			AC = {};
 			AC.lang_warning = "'.$this->EE->lang->line('warning_no_questions').'"
+			AC.lang_warning_question = "'.$this->EE->lang->line('warning_question').'"
+			AC.lang_warning_answer = "'.$this->EE->lang->line('warning_answer').'"
 		'));
 		$this->EE->javascript->compile();
 		
@@ -144,7 +146,73 @@ class Accessible_captcha_ext {
 			$data['XID'] = XID_SECURE_HASH;
 		}
 		$data['lang'] = $this->EE->lang->language;
+		$data['BASE'] = str_replace('amp;', '&', BASE);
+		
+		$site_id = $this->EE->config->item('site_id');
+		$settings = $current[$site_id];
+		$data['switched_on'] = $settings['switched_on'];
+		$data['hints'] = $settings['hints'];
+		$data['hints_wrap'] = $settings['hints_wrap'];
+		$data['pairs'] = $settings['pairs'];
+		
     	return $this->EE->twig->render('settings.html', $data, TRUE);
+	}
+	
+	/**
+	 * Save Settings
+	 *
+	 * @author		Greg Salt <greg@purple-dogfish.co.uk>
+	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @access		Public
+	 * @return		void
+	 */
+	function save_settings()
+	{
+		if (empty($_POST))
+		{
+			show_error($this->EE->lang->line('unauthorized_access'));
+		}
+		
+		unset($_POST['submit']);
+		$this->EE->lang->loadfile('accessible_captcha');
+
+		$switched_on = $this->EE->input->post('switched_on');
+		$hints = $this->EE->input->post('hints');
+		$hints_wrap = $this->EE->input->post('hints_wrap');
+		
+		$this->_valid_or_redirect($switched_on, array('yes', 'no'));
+		$this->_valid_or_redirect($hints, array('yes', 'no'));
+		$this->_valid_or_redirect($hints_wrap, array('yes', 'no'));
+		
+		$questions = $this->EE->input->post('questions');
+		$answers = $this->EE->input->post('answers');
+		$pairs = array();
+		foreach($questions AS $index => $question)
+		{
+			if (isset($answers[$index]))
+			{
+				$pairs[] = array(
+						'question' => $question,
+						'answer' => $answers[$index]
+					);
+			}
+		}
+		
+		$site_id = $this->EE->config->item('site_id');
+		
+		$data = array();
+		$data[$site_id]['switched_on'] = $switched_on;
+		$data[$site_id]['hints'] = $hints;
+		$data[$site_id]['hints_wrap'] = $hints_wrap;
+		$data[$site_id]['pairs'] = $pairs;
+		
+		$this->EE->db->where('class', __CLASS__);
+		$this->EE->db->update('extensions', array('settings' => serialize($data)));
+		
+		$this->EE->session->set_flashdata('message_success', $this->EE->lang->line('preferences_updated'));
+		$this->EE->functions->redirect(
+			BASE.AMP.'C=addons_extensions'.AMP.'M=extension_settings'.AMP.'file=accessible_captcha'
+		);
 	}
 
 	/**
@@ -234,6 +302,19 @@ class Accessible_captcha_ext {
 		// Override the lang.core.php keys for captchas
 		$this->EE->lang->language['captcha_required'] = $captcha_required;
 		$this->EE->lang->language['captcha_incorrect'] = $captcha_incorrect;
+	}
+	
+	function _valid_or_redirect()
+	{
+		$var = func_get_arg(0);
+		$tests = func_get_arg(1);
+		if (! in_array($var, $tests))
+		{
+			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('save_failure'));
+			$this->EE->functions->redirect(
+				BASE.AMP.'C=addons_extensions'.AMP.'M=extension_settings'.AMP.'file=accessible_captcha'
+			);
+		}
 	}
 }
 /* End of file accessible_captcha.php */

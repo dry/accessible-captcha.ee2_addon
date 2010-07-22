@@ -50,6 +50,8 @@ class Twig {
 					'debug' => $this->_debug
 				)
 			);
+		$escaper = new Twig_Extension_Escaper(true);
+		$this->twig->addExtension($escaper);
 
 		require_once $this->EE->load->_ci_library_paths[0].'libraries/Twig_filters/Twig_filters'.EXT;
 		$this->twig->addFilter('date', new Twig_Filter_Function('date_filter'));
