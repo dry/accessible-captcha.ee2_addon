@@ -92,6 +92,21 @@ class Accessible_captcha_ext {
 		
 		if ($this->version < '2.1')
 		{
+			$settings = array();
+			
+			$query = $this->EE->db->get('sites');
+			foreach($query->result() AS $site)
+			{
+				$settings[$site['site_id']]['switched_on'] = 'yes';
+				$settings[$site['site_id']]['hints'] = $current['hints'];
+				$settings[$site['site_id']]['hints_wrap'] = $current['hints'];
+				
+				$answers_array = array_slice($current, 0, 8);
+				$questions_array = array_slice($current, 8, 8);
+
+				$set = array_combine($questions_array, $answers_array);
+				
+			}
 			/*
 			// Get rid of the Hints and Hints wrap settings
 			array_shift($settings);
@@ -262,6 +277,13 @@ class Accessible_captcha_ext {
 		}
 		
 		$settings = $this->settings[$site_id];
+		
+		if ($settings['switched_on'] == 'no')
+		{
+			$this->EE->extensions->end_script = FALSE;
+			return $old_word;
+		}
+		
 		$this->EE->extensions->end_script = TRUE;
 		
 		$left_wrap = '';
@@ -286,7 +308,8 @@ class Accessible_captcha_ext {
 		
 		if($settings['hints'] == 'yes')
 		{
-			$question .= ' <span class="captcha-hints">' . $left_wrap . strlen($data['word']) . ' ' . $this->EE->lang->line('characters_required') . $right_wrap . '</span>';
+			$line = (strlen($data['word']) == 1) ? 'character_required' : 'characters_required';
+			$question .= ' <span class="captcha-hints">' . $left_wrap . strlen($data['word']) . ' ' . $this->EE->lang->line($line) . $right_wrap . '</span>';
 		}
 		
 		return $question;

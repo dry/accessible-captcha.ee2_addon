@@ -41,8 +41,11 @@ $lang = array(
 	'answer' =>
 	'Answer',
 	
+	'character_required' =>
+	'character required',
+	
 	'characters_required' =>
-	'character(s) required',
+	'characters required',
 	
 	'' => ''
 	);
