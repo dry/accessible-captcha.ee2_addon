@@ -90,6 +90,29 @@ class Accessible_captcha_ext {
 	{
 		$status = TRUE;
 		
+		if ($this->version < '2.1')
+		{
+			/*
+			// Get rid of the Hints and Hints wrap settings
+			array_shift($settings);
+			array_shift($settings);
+
+			ksort($settings);
+
+			$answers_array = array_slice($settings, 0, 8);
+			$questions_array = array_slice($settings, 8, 8);
+
+			$set = array_combine($questions_array, $answers_array);
+
+			$question_count = count($set);
+
+			if ($question_count < 8)
+			{
+				array_pop($set);
+			}
+			*/
+		}
+		
 		if ($this->version != $current)
 		{
 			$data = array();
@@ -175,6 +198,7 @@ class Accessible_captcha_ext {
 		
 		unset($_POST['submit']);
 		$this->EE->lang->loadfile('accessible_captcha');
+		$this->EE->load->helper('array');
 
 		$switched_on = $this->EE->input->post('switched_on');
 		$hints = $this->EE->input->post('hints');
@@ -189,7 +213,7 @@ class Accessible_captcha_ext {
 		$pairs = array();
 		foreach($questions AS $index => $question)
 		{
-			if (isset($answers[$index]))
+			if ($question !== '')
 			{
 				$pairs[] = array(
 						'question' => $question,
@@ -198,6 +222,11 @@ class Accessible_captcha_ext {
 			}
 		}
 		
+		if (count($pairs) == 0)
+		{
+			$pairs[0] = array('question' => '', 'answer' => '');
+		}
+
 		$site_id = $this->EE->config->item('site_id');
 		
 		$data = array();
@@ -224,56 +253,40 @@ class Accessible_captcha_ext {
 	 */
 	function create_captcha($old_word = '')
 	{
-		// Only continue if the extension has been setup correctly
-		if (count($this->settings) < 2)
+		$site_id = $this->EE->config->item('site_id');
+		
+		if ( ! isset($this->settings[$site_id]))
 		{
-			return;
+			$this->EE->extensions->end_script = FALSE;
+			return $old_word;
 		}
 		
+		$settings = $this->settings[$site_id];
 		$this->EE->extensions->end_script = TRUE;
 		
-		$settings = $this->settings;
-		
-		// Get rid of the Hints and Hints wrap settings
-		array_shift($settings);
-		array_shift($settings);
-		
-		ksort($settings);
-		
-		$answers_array = array_slice($settings, 0, 8);
-		$questions_array = array_slice($settings, 8, 8);
-		
-		$set = array_combine($questions_array, $answers_array);
-
+		$left_wrap = '';
+		$right_wrap = '';
+		$set = $settings['pairs'];
 		$question_count = count($set);
+		$question_pair = array_rand($set);
+		$question = $set[$question_pair]['question'];
 		
-		if ($question_count < 8)
-		{
-			array_pop($set);
-		}
-		
-		$answer = '';
-
-		$seed = array_rand($set);
-		
-		$question = $seed;
-		$answer = $set[$seed];
-
-		$this->EE->db->query("INSERT INTO exp_captcha (date, ip_address, word) VALUES (UNIX_TIMESTAMP(), '".$this->EE->input->ip_address()."', '".$this->EE->db->escape_str($answer)."')");
+		$data['date'] = time();
+		$data['ip_address'] = $this->EE->input->ip_address();
+		$data['word'] = $set[$question_pair]['answer'];
+		$this->EE->db->insert('captcha', $data);
 	
-		$this->cached_captcha = $answer;
-	
-		if($this->settings['hints_wrap'] == 'yes')
+		if($settings['hints_wrap'] == 'yes')
 		{
-			$lw = '(';
-			$rw = ')';
+			$left_wrap = '(';
+			$right_wrap = ')';
 		}
 	
-		$this->EE->lang->loadfile('pur_accessible_captcha');
+		$this->EE->lang->loadfile('accessible_captcha');
 		
-		if($this->settings['hints'] == 'yes')
+		if($settings['hints'] == 'yes')
 		{
-			$question .= ' <span class="captcha-hints">' . $lw . strlen($answer) . ' ' . $this->EE->lang->line('characters_required') . $rw . '</span>';
+			$question .= ' <span class="captcha-hints">' . $left_wrap . strlen($data['word']) . ' ' . $this->EE->lang->line('characters_required') . $right_wrap . '</span>';
 		}
 		
 		return $question;
@@ -288,9 +301,11 @@ class Accessible_captcha_ext {
 	 */
 	function lang_override()
 	{
-		// Only override the language keys if the extension has been setup correctly
-		if (count($this->settings) < 2)
+		$site_id = $this->EE->config->item('site_id');
+		
+		if ( ! isset($this->settings[$site_id]))
 		{
+			$this->EE->extensions->end_script = FALSE;
 			return;
 		}
 		
