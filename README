@@ -1,1 +1,3 @@
-Copy the pur_accessible_captcha directory into system/expressionengine/third_party. Install, add some questions and answers in the settings. That's it!
+Copy the dry_accessible_captcha directory into system/expressionengine/third_party. Install, add some questions and answers in the settings. That's it!
+
+Note: If you have previously installed Accessible Captcha for EE 2.x then please uninstall it and remove the pur_accessible_captcha directory before installing this version.
