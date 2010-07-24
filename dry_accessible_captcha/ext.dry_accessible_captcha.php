@@ -6,15 +6,15 @@
  * @package		Accessible Captcha
  * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
  * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
- * @license		http://creativecommons.org/licenses/by-sa/3.0/
- * @link		http://www.purple-dogfish.co.uk
- * @since		Version 2.0
+ * @license		http://www.purple-dogfish.co.uk/licence/free
+ * @link		http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x
+ * @since		Version 2.1.
  * 
  */
 
 /**
  * Changelog
- * Version 2.1 2010
+ * Version 2.1 20100724
  * Replaced 'pur' prefix with 'dry'
  * Implemented dynamic question and answer pairs
  * Fully MSM compatible i.e. use different Q&A pairs in sites
@@ -29,7 +29,7 @@ class Dry_accessible_captcha_ext {
 	var $version         = '2.1';
 	var $description     = 'Convert the default graphic captcha into an accessible (and more secure) version using questions and answers';
 	var $settings_exist  = 'y';
-	var $docs_url        = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha';
+	var $docs_url        = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x';
 
 	var $settings        = array();
 	
