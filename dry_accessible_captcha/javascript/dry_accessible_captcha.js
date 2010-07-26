@@ -12,7 +12,7 @@ function removeTableRow() {
 		var controls = $("#controls").detach();
 		var removeThis = $(this).parents("tr");
 		removeThis.remove();
-		$(".settings_pair").parent("table").append(controls);
+		$(".settings_pair").parent("table").after(controls);
 	}
 	
 }
@@ -26,6 +26,6 @@ $("#add_pair").click(function() {
 	}
 	var controls = $("#controls").detach();
 	$(".settings_pair").append('<tr class="even"><td><textarea name="questions[]" rows="1" cols="30"></textarea></td><td><textarea name="answers[]" rows="1" cols="30"></textarea></td><td class="clean"><span class="remove_pair">&ndash;</span></td></tr>');
-	$(".settings_pair").parent("table").append(controls);
+	$(".settings_pair").parent("table").after(controls);
 	$(".remove_pair").unbind().bind('click', removeTableRow);
 });

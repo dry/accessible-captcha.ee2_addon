@@ -1,18 +1,22 @@
 #controls {
 	margin: auto auto 10px;
+	text-align: right;
+	width: 100%;
+}
+
+#controls .button {
+	display: inline;
+	float: none;
 }
 
 #add_pair {
 	clear: both;
 	cursor: pointer;
+	display: inline;
 	font-size: 1em;
 	margin: 0;
-	padding: 0;
 	text-align: center;
-}
-
-#add_pair:hover {
-	color: #80b62a;
+	text-decoration: none;
 }
 
 .remove_pair {
