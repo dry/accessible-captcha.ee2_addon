@@ -12,7 +12,7 @@
 #add_pair {
 	clear: both;
 	cursor: pointer;
-	display: inline;
+	display: inline-block;
 	font-size: 1em;
 	margin: 0;
 	text-align: center;
