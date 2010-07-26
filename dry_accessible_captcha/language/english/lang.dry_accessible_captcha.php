@@ -23,6 +23,9 @@ $lang = array(
 	'warning_answer' =>
 	'Replace this with your first answer!',
 	
+	'add_pair' =>
+	'Add another pair',
+	
 	'captcha_required' =>
 	'You must answer the question before you are allowed to post',
 	
