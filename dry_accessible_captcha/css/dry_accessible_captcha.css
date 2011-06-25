@@ -9,18 +9,6 @@
 	float: none;
 }
 
-#add_pair {
-	clear: both;
-	color: #fff;
-	cursor: pointer;
-	display: inline-block;
-	font-size: 1em;
-	margin: 0;
-	padding: 12px 10px 0;
-	text-align: center;
-	text-decoration: none;
-}
-
 .remove_pair {
 	cursor: pointer;
 	display: block;
