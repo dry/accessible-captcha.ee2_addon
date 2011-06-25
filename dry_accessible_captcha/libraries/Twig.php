@@ -30,10 +30,10 @@ class Twig {
 	public function __construct($string = FALSE)
 	{
 		$this->EE =& get_instance();
-		
-		$this->_template_dirs = $this->EE->load->_ci_view_path;
 
-		require_once $this->EE->load->_ci_library_paths[0].'libraries/Twig/Autoloader'.EXT;
+		$this->_template_dirs = PATH_THIRD.'dry_accessible_captcha/views/'; 
+
+		require_once PATH_THIRD.'dry_accessible_captcha/libraries/Twig/Autoloader'.EXT;
 		Twig_Autoloader::register();
 		
 		if ($string)
@@ -53,7 +53,7 @@ class Twig {
 		$escaper = new Twig_Extension_Escaper(true);
 		$this->twig->addExtension($escaper);
 
-		require_once $this->EE->load->_ci_library_paths[0].'libraries/Twig_filters/Twig_filters'.EXT;
+		require_once PATH_THIRD.'dry_accessible_captcha/libraries/Twig_filters/Twig_filters'.EXT;
 		$this->twig->addFilter('date', new Twig_Filter_Function('date_filter'));
 	}
 	
