@@ -9,6 +9,12 @@
 	float: none;
 }
 
+#controls #add_pair.submit {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
 .remove_pair {
 	cursor: pointer;
 	display: block;
@@ -25,7 +31,7 @@
 	opacity: 1;
 }
 
-#warning {
+#warning, #message_success {
 	background: #fcfcdf;
 	border: #CCC9A4 1px solid; 
 	color: #d91350;

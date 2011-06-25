@@ -167,6 +167,7 @@ class Dry_accessible_captcha_ext {
 		$data['hints'] = $settings['hints'];
 		$data['hints_wrap'] = $settings['hints_wrap'];
 		$data['pairs'] = $settings['pairs'];
+		$data['flash_message'] = $this->EE->session->flashdata('message_success');
 		
     	return $this->EE->twig->render('settings.html', $data, TRUE);
 	}
@@ -236,7 +237,7 @@ class Dry_accessible_captcha_ext {
 		
 		$this->EE->db->where('class', __CLASS__);
 		$this->EE->db->update('extensions', array('settings' => serialize($save_data)));
-		
+
 		$this->EE->session->set_flashdata('message_success', $this->EE->lang->line('preferences_updated'));
 		$this->EE->functions->redirect(
 			BASE.AMP.'C=addons_extensions'.AMP.'M=extension_settings'.AMP.'file=dry_accessible_captcha'

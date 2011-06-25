@@ -1,4 +1,9 @@
 <div class="pageContents">
+	{% if flash_message %}
+	<div id="message_success">
+		{{ flash_message }}	
+	</div>
+	{% endif %}
 	<form action="{{ BASE }}&C=addons_extensions&M=save_extension_settings&file=dry_accessible_captcha" method="post">
 		{% if XID %}
 		<div>

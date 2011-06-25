@@ -17,6 +17,8 @@ function removeTableRow() {
 	
 }
 
+$("#message_success").fadeTo(3000, 0.5);
+
 $(".remove_pair").bind('click', removeTableRow);
 
 $("#add_pair").click(function() {
