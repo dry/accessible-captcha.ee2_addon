@@ -14,6 +14,11 @@
 
 /**
  * Changelog
+ * Version 2.2 20110628
+ * Fixed bug generated in EE 2.2.0
+ * Fixed rendering of add pair button
+ * Enabled 'settings saved' flash message
+ *
  * Version 2.1 20100724
  * Replaced 'pur' prefix with 'dry'
  * Implemented dynamic question and answer pairs
