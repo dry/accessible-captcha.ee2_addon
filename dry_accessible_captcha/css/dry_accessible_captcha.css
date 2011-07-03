@@ -9,9 +9,8 @@
 	float: none;
 }
 
-#controls #add_pair.submit {
-	margin: 0;
-	padding: 0;
+#add_pair {
+	padding: 5px 0;
 	text-align: center;
 }
 

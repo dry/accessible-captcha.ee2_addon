@@ -5,7 +5,7 @@
  *
  * @package		Accessible Captcha
  * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
- * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+ * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
  * @license		http://www.purple-dogfish.co.uk/licence/free
  * @link		http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x
  * @since		Version 2.1.
@@ -31,7 +31,7 @@
 class Dry_accessible_captcha_ext {
 
 	var $name            = 'Accessible Captcha';
-	var $version         = '2.1';
+	var $version         = '2.2';
 	var $description     = 'Convert the default graphic captcha into an accessible (and more secure) version using questions and answers';
 	var $settings_exist  = 'y';
 	var $docs_url        = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x';
@@ -42,7 +42,7 @@ class Dry_accessible_captcha_ext {
 	 * Constructor
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function Dry_accessible_captcha_ext($settings = '')
@@ -56,7 +56,7 @@ class Dry_accessible_captcha_ext {
 	 * Activate Extension
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function activate_extension()
@@ -88,7 +88,7 @@ class Dry_accessible_captcha_ext {
 	 * Update Extension
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function update_extension($current = '')
@@ -114,7 +114,7 @@ class Dry_accessible_captcha_ext {
 	 * Disable Extensions
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function disable_extension()
@@ -127,7 +127,7 @@ class Dry_accessible_captcha_ext {
 	 * Settings
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function settings_form($current)
@@ -181,7 +181,7 @@ class Dry_accessible_captcha_ext {
 	 * Save Settings
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function save_settings()
@@ -253,7 +253,7 @@ class Dry_accessible_captcha_ext {
 	 * Create Captcha Hook
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 * @param		<string> Unused by this extension
 	 */
@@ -310,7 +310,7 @@ class Dry_accessible_captcha_ext {
 	 * Lang Override
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Public
 	 */
 	function lang_override()
@@ -337,7 +337,7 @@ class Dry_accessible_captcha_ext {
 	 * Validate function arguments or redirect
 	 *
 	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2010 Purple Dogfish Ltd
+	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
 	 * @access		Private
 	 */
 	function _valid_or_redirect()
