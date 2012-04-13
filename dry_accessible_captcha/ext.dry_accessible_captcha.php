@@ -303,7 +303,8 @@ class Dry_accessible_captcha_ext {
 			$question .= ' <span class="captcha-hints">' . $left_wrap . strlen($data['word']) . ' ' . $this->EE->lang->line($line) . $right_wrap . '</span>';
 		}
 		
-		return $question;
+		// Escape dollar signs
+		return str_replace('$', '&#36;', $question);
 	}
 	
 	/**
