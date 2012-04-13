@@ -5,7 +5,7 @@
  *
  * @package		Accessible Captcha
  * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
- * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
+ * @copyright	Copyright (c) 2009 - 2012 Purple Dogfish Ltd
  * @license		http://www.purple-dogfish.co.uk/licence/free
  * @link		http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x
  * @since		Version 2.1.
@@ -14,6 +14,10 @@
 
 /**
  * Changelog
+ * Version 2.3 20120413
+ * Enabled use of dollar signs in captcha questions
+ * Cleaned up code to remove legacy PHP4 stuff
+ *
  * Version 2.2 20110628
  * Fixed bug generated in EE 2.2.0
  * Fixed rendering of add pair button
@@ -30,22 +34,22 @@
  */
 class Dry_accessible_captcha_ext {
 
-	var $name            = 'Accessible Captcha';
-	var $version         = '2.2';
-	var $description     = 'Convert the default graphic captcha into an accessible (and more secure) version using questions and answers';
-	var $settings_exist  = 'y';
-	var $docs_url        = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x';
+	public $name = 'Accessible Captcha';
+	public $version = '2.3';
+	public $description = 'Convert the default graphic captcha into an accessible (and more secure) version using questions and answers';
+	public $settings_exist = 'y';
+	public $docs_url = 'http://www.purple-dogfish.co.uk/free-stuff/accessible-captcha-2.x';
 
-	var $settings        = array();
+	public $settings = array();
 	
 	/**
 	 * Constructor
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return \Dry_accessible_captcha_ext
 	 */
-	function Dry_accessible_captcha_ext($settings = '')
+	public function __construct($settings = '')
 	{
 		$this->EE =& get_instance();
 		
@@ -55,11 +59,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Activate Extension
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return void
 	 */
-	function activate_extension()
+	public function activate_extension()
 	{
 		$data = array();
 
@@ -87,11 +91,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Update Extension
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return bool TRUE on update, FALSE otherwise
 	 */
-	function update_extension($current = '')
+	public function update_extension($current = '')
 	{
 		$status = TRUE;
 		
@@ -113,11 +117,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Disable Extensions
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return void
 	 */
-	function disable_extension()
+	public function disable_extension()
 	{
 		$this->EE->db->where('class', __CLASS__);
     	$this->EE->db->delete('extensions');
@@ -126,11 +130,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Settings
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return string Rendered template
 	 */
-	function settings_form($current)
+	public function settings_form($current)
 	{
 		$this->EE->load->library('twig');
 		$this->EE->lang->loadfile('dry_accessible_captcha');
@@ -143,13 +147,16 @@ class Dry_accessible_captcha_ext {
 			AC.lang_warning_question = "'.$this->EE->lang->line('warning_question').'"
 			AC.lang_warning_answer = "'.$this->EE->lang->line('warning_answer').'"
 		'));
+
 		$this->EE->javascript->compile();
 		
 		$data = array();
+
 		if ($this->EE->config->item('secure_forms') == 'y')
 		{
 			$data['XID'] = XID_SECURE_HASH;
 		}
+
 		$data['lang'] = $this->EE->lang->language;
 		$data['BASE'] = str_replace('amp;', '&', BASE);
 		
@@ -180,11 +187,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Save Settings
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return void
 	 */
-	function save_settings()
+	public function save_settings()
 	{
 		if (empty($_POST))
 		{
@@ -252,12 +259,13 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Create Captcha Hook
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
-	 * @param		<string> Unused by this extension
+	 * @access public
+	 *
+	 * @param string Unused by this extension
+	 *
+	 * @return string Captcha question
 	 */
-	function create_captcha($old_word = '')
+	public function create_captcha($old_word = '')
 	{
 		unset($old_word);
 		$site_id = $this->EE->config->item('site_id');
@@ -300,20 +308,21 @@ class Dry_accessible_captcha_ext {
 		if($settings['hints'] == 'yes')
 		{
 			$line = (strlen($data['word']) == 1) ? 'character_required' : 'characters_required';
-			$question .= ' <span class="captcha-hints">' . $left_wrap . strlen($data['word']) . ' ' . $this->EE->lang->line($line) . $right_wrap . '</span>';
+			$question .= ' <span class="captcha-hints">'.$left_wrap.strlen($data['word']).' '.$this->EE->lang->line($line).$right_wrap.'</span>';
 		}
 		
-		return $question;
+		// Escape dollar signs
+		return str_replace('$', '&#36;', $question);
 	}
 	
 	/**
 	 * Lang Override
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Public
+	 * @access public
+	 *
+	 * @return void
 	 */
-	function lang_override()
+	public function lang_override()
 	{
 		$site_id = $this->EE->config->item('site_id');
 		
@@ -336,11 +345,11 @@ class Dry_accessible_captcha_ext {
 	/**
 	 * Validate function arguments or redirect
 	 *
-	 * @author		Greg Salt <drylouvre> <greg@purple-dogfish.co.uk>
-	 * @copyright	Copyright (c) 2009 - 2011 Purple Dogfish Ltd
-	 * @access		Private
+	 * @access private
+	 *
+	 * @return void
 	 */
-	function _valid_or_redirect()
+	public function _valid_or_redirect()
 	{
 		$var = func_get_arg(0);
 		$tests = func_get_arg(1);
@@ -354,4 +363,4 @@ class Dry_accessible_captcha_ext {
 	}
 }
 /* End of file ext.dry_accessible_captcha.php */
-/* Location: ./system/expressionengine/third_party/dry_accessible_captcha/ext.dry_accessible_captcha.php */
+/* Location: ./third_party/dry_accessible_captcha/ext.dry_accessible_captcha.php */
