@@ -1,5 +1,5 @@
 Copy the dry_accessible_captcha directory into system/expressionengine/third_party. Install, add some questions and answers in the settings. That's it!
 
-Note: If you have previously installed Accessible Captcha for EE 2.x then please uninstall it and remove the pur_accessible_captcha directory before installing this version.
+Note: If you have previously installed Accessible Captcha for EE 1.x then please uninstall it and remove the pur_accessible_captcha directory before installing this version.
 
 This package contains the Twig library by Fabien Potencier. Any licence applicable to Accessible Captcha for ExpressionEngine 2.x does not apply to Twig. Please see http://twig-project.org
